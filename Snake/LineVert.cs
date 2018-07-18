@@ -6,20 +6,16 @@ using System.Threading.Tasks;
 
 namespace Snake
 {
-    class LineHorizont : figure
+    class LineVert : figure
     {
-
-        public LineHorizont(int xLeft, int xRight, int y, char sym)
+        public LineVert(int x, int yUp, int yDown, char sym)
         {
             pList = new List<Point>();
-            for(int x = xLeft; x <=xRight; x++)
+            for (int y = yUp; y <= yDown; y++)
             {
                 Point p = new Point(x, y, sym);
                 pList.Add(p);
             }
-        }
-
-       
-
+        }   
     }
 }
