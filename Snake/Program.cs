@@ -13,14 +13,8 @@ namespace Snake
         {
             Console.SetBufferSize(80, 25);
 
-            LineHorizont UPline = new LineHorizont(0, 78, 0, '+');
-            UPline.Drow();
-            LineHorizont Downline = new LineHorizont(0, 78, 24, '+');
-            Downline.Drow();
-            LineVert Leftline = new LineVert(0, 0, 24, '+');
-            Leftline.Drow();
-            LineVert Rightlie = new LineVert(78, 0, 24, '+');
-            Rightlie.Drow();
+            Walls walls = new Walls(80, 25);
+            walls.Draw();
 
             Point p = new Point(4, 5, '*');
             Snake snake = new Snake(p, 4, Direction.RIGHT);
@@ -28,14 +22,22 @@ namespace Snake
 
             FoodCreator foodCreator = new FoodCreator(80, 25, '$');
             Point food = foodCreator.CreateFood();
+            Console.ForegroundColor = ConsoleColor.Yellow;
             food.Draw();
+            Console.ForegroundColor = ConsoleColor.Red;
 
-            while(true)
+            while (true)
             {
+                if (walls.IsHit(snake) || snake.IsHitTail())
+                {
+                    break;
+                }                                  
                 if(snake.Eat(food))
                 {
                     food = foodCreator.CreateFood();
+                    Console.ForegroundColor = ConsoleColor.Yellow;
                     food.Draw();
+                    Console.ForegroundColor = ConsoleColor.Red;
                 }
                 else
                 {
@@ -46,9 +48,29 @@ namespace Snake
                 {
                     ConsoleKeyInfo key = Console.ReadKey();
                     snake.HandeKey(key.Key);
-                }
-               
-            }          
-        }        
+                }               
+            }
+            WriteGameOver();
+            Console.ReadLine();
+
+        }
+        static void WriteGameOver()
+        {
+            int xOffset = 25;
+            int yOffset = 8;
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.SetCursorPosition(xOffset, yOffset++);
+            WriteText("============================", xOffset, yOffset++);
+            WriteText("THE GAME IS OVER!", xOffset + 6, yOffset++);
+            yOffset++;
+            WriteText("Автор: Морозенко Даниил", xOffset + 2, yOffset++);            
+            WriteText("____________________________", xOffset, yOffset++);
+        }
+
+        static void WriteText(String text, int xOffset, int yOffset)
+        {
+            Console.SetCursorPosition(xOffset, yOffset);
+            Console.WriteLine(text);
+        }
     }
 }
